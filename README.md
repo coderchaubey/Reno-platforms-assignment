@@ -52,7 +52,7 @@ Live Site: [https://reno-platforms-assignment.vercel.app/](https://reno-platform
 ### 1. Clone the repository
 Link: [https://github.com/coderchaubey/Reno-platforms-assignment.git]
 ### 2. Install dependencies
-npm install
+- npm install
 ### 3. Setup MySql Database
 - Create a MySQL database for the project
 - Create the schools table:
@@ -76,5 +76,5 @@ DB_PASSWORD=<Your password>
 DB_NAME=<your db name>
 ```
 ### 5. Run locally
-npm run dev
-Visit Site: [http://localhost:3000](http://localhost:3000)
+- npm run dev
+- Visit Site: [http://localhost:3000](http://localhost:3000)
