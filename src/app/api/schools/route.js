@@ -20,7 +20,7 @@ export async function POST(req) {
     if (file && file.size > 0) {
       const buffer = Buffer.from(await file.arrayBuffer());
       const dir = path.join(process.cwd(), "public/schoolImages");
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); //Create path if not exists
+    //   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); //Create path if not exists
 
       const fileName = `${Date.now()}-${file.name || "unknown"}`;
       const filePath = path.join(dir, fileName);
