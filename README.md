@@ -54,9 +54,10 @@ Link: [https://github.com/coderchaubey/Reno-platforms-assignment.git]
 ### 2. Install dependencies
 npm install
 ### 3. Setup MySql Database
--> Create a MySQL database for the project
--> Create the schools table:
-``` CREATE TABLE schools (
+- Create a MySQL database for the project
+- Create the schools table:
+``` 
+CREATE TABLE schools (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name TEXT,
     address TEXT,
@@ -68,11 +69,12 @@ npm install
     );
 ```
 ### 4. Create ".env.local" file in the project root folder
+```
 DB_HOST=<Your host>
 DB_USER=<Your username>
 DB_PASSWORD=<Your password>
 DB_NAME=<your db name>
-
+```
 ### 5. Run locally
 npm run dev
-Link: [http://localhost:3000]
+Visit Site: [http://localhost:3000](http://localhost:3000)
