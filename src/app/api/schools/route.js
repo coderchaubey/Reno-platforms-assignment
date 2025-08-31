@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/db";
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { put } from "@vercel/blob";
 
 // API for adding the schools
 export async function POST(req) {
@@ -18,19 +19,31 @@ export async function POST(req) {
     let imagePath = null;
 
     if (file && file.size > 0) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const dir = path.join(process.cwd(), "public/schoolImages");
-    //   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); //Create path if not exists
-
       const fileName = `${Date.now()}-${file.name || "unknown"}`;
-      const filePath = path.join(dir, fileName);
-      fs.writeFileSync(filePath, buffer);
-      imagePath = `/schoolImages/${fileName}`;
+
+      if (process.env.NODE_ENV === "development") {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const dir = path.join(process.cwd(), "public/schoolImages");
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); //Create path if not exists
+
+        const filePath = path.join(dir, fileName);
+        fs.writeFileSync(filePath, buffer);
+        imagePath = `/schoolImages/${fileName}`;
+        
+      } else { //For deployment cases using vercel blob
+        const blob = await put(`schoolImages/${fileName}`, file, {
+            access: 'public',
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+        })
+
+        imagePath = blob.url;
+      }
     }
 
     const db = await connectToDatabase(); //Get the connection var
 
-    await db.execute( //Persist to DB
+    await db.execute(
+      //Persist to DB
       "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [name, address, city, state, contact, imagePath, email_id]
     );
@@ -49,7 +62,8 @@ export async function GET() {
   try {
     const db = await connectToDatabase(); //Get the connection var
 
-    const [rows] = await db.execute( //Get the data from db
+    const [rows] = await db.execute(
+      //Get the data from db
       "SELECT id, name, address, city, image from schools"
     );
     return NextResponse.json(rows, { status: 200 });
